@@ -56,6 +56,19 @@ class NotesController {
       const { id } = req.params 
 
       await knex("notes").where({ id }).delete()
+
+      res.json()
+   }
+
+   async index(req, res) {
+      // req.query in Insomnia is in "Query"
+      const { user_id } = req.query
+
+      const notes = await knex("notes")
+         .where({ user_id })
+         .orderBy("title")
+
+      res.json(notes)
    }
 }
 
