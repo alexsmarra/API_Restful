@@ -62,13 +62,49 @@ class NotesController {
 
    async index(req, res) {
       // req.query in Insomnia is in "Query"
-      const { user_id } = req.query
+      const { user_id, title, tags } = req.query
 
-      const notes = await knex("notes")
-         .where({ user_id })
-         .orderBy("title")
+      let notes;
 
-      res.json(notes)
+      if(tags) {
+         const filterTags = tags.split(",").map(tag => tag.trim())
+
+         // we want to select (para mostrar no resultado) only the id, title and user_id of notes table...
+         notes = await knex("tags")
+            .select([
+               "notes.id",
+               "notes.title",
+               "notes.user_id"
+            ])
+            // where "notes.user_id" = user_id of the query..
+            .where("notes.user_id", user_id)
+            // whereLike "notes.title" words of the "title" in the query (para buscar o título sem precisar digitá-lo todo na query, mas apenas por uma palavra chave)..
+            .whereLike("notes.title", `%${title}%`)
+            // fetch the name of the tags that have in filterTags (as we are not specifying ("notes.something"), the "name" is to "tags", because we have "notes = await knex("tags")) above..
+            .whereIn("name", filterTags)
+            // we mean is, in the first param we want to connect the "notes" table, in the second and third params is which fields we want to connect to (é para quais campos queremos conectar)..
+            .innerJoin("notes", "notes.id", "tags.note_id")
+            .orderBy("notes.title")
+      
+      } else {
+         notes = await knex("notes")
+            .where({ user_id })
+            // through this way, we can fetch the name of notes without having to type the full name of the notes correctly
+            .whereLike("title", `%${title}%`)
+            .orderBy("title")
+      }
+
+      const userTags = await knex("tags").where({ user_id })
+      const notesWithTags = notes.map(note => {
+         const noteTags = userTags.filter(tag => tag.note_id === note.id)
+
+         return {
+            ...note,
+            tags: noteTags
+         }
+      })
+
+      return res.json(notesWithTags)
    }
 }
 
