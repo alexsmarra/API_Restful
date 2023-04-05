@@ -38,7 +38,7 @@ class NotesController {
    async show(req, res) {
       const { id } = req.params
 
-      // in "notes" table, the notes WHERE id = 1, and only the first ("first()") one to find (apenas o primeiro que encontrar, mas no caso só temos um, com o id = 1 aí é que só temos um mesmo)
+      // in "notes" table, the notes WHERE id = 1, and only the first ("first()") one to find (apenas o primeiro que encontrar, mas no caso só temos um, com o id = 1 aí é que só temos um mesmo
       const note = await knex("notes").where({ id }).first()
       // in "tags" table, the tags where the note_id = id (req.params id) in order by name (ordem alfabética)
       const tags = await knex("tags").where({ note_id: id }).orderBy("name")
@@ -85,6 +85,8 @@ class NotesController {
             // we mean is, in the first param we want to connect the "notes" table, in the second and third params is which fields we want to connect to (é para quais campos queremos conectar)..
             .innerJoin("notes", "notes.id", "tags.note_id")
             .orderBy("notes.title")
+
+            console.log(notes)
       
       } else {
          notes = await knex("notes")
@@ -103,6 +105,8 @@ class NotesController {
             tags: noteTags
          }
       })
+
+      console.log(notes)
 
       return res.json(notesWithTags)
    }

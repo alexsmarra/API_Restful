@@ -1,20 +1,19 @@
 require("express-async-errors")
-// import index.js inside "migrations" folder
-const migrationsRun = require("./database/sqlite/migrations")
+// *** import index.js inside "migrations" folder (DO NOT USE)
+const migrationsRun = require("./database/sqlite/migrations") 
 const AppError = require("./utils/AppError")
 
 const express = require("express")
 
 const routes = require("./routes")
 
-// invoking database in migrations folder
+// *** invoking database in migrations folder (DO NOT USE)
 migrationsRun()
 
 const app = express()
 app.use(express.json())
 
 app.use(routes)
-
 
 app.use((err, req, res, next) => {
    if(err instanceof AppError) {
