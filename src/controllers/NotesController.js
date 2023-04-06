@@ -57,7 +57,7 @@ class NotesController {
 
       await knex("notes").where({ id }).delete()
 
-      res.json()
+      return res.json()
    }
 
    async index(req, res) {
