@@ -5,6 +5,7 @@ const authConfig = require("../configs/auth")
 function ensureAuthenticated(req, res, next) {
    // the token will stay here
    const authHeader = req.headers.authorization
+   console.log(authHeader)
 
    if(!authHeader) {
       throw new AppError("Uninformed JWT Token", 401)
@@ -16,6 +17,7 @@ function ensureAuthenticated(req, res, next) {
    try {
       // 'verify' returns a 'sub', and we'll nickname it 'user_id' (vamos apelidá-lo de 'user_id')
       const { sub: user_id } = verify(token, authConfig.jwt.secret)
+      console.log(verify(token, authConfig.jwt.secret))
 
       // let's create the 'user' variable inside request
       req.user = {
