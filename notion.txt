@@ -1,3 +1,6 @@
 JWT => JSON WEB TOKEN    npm install jsonwebtoken
+
 CORS => to connect frontend with backend, for the backend to serve (atenda) the frontend requests   npm install CORS
+
+AXIOS => library to http requests   npm install axios
 
