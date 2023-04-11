@@ -1,3 +1,5 @@
+// We are not going to save the image file inside de database because it is heavy, but we'll put it inside a folder and the database will take de image reference.
+
 // in terminal    npm install multer   , is the library that we'll use to upload 
 const path = require("path")
 const multer = require("multer")
