@@ -6,8 +6,8 @@ class NotesController {
       // pega o primeiro param após "._BASE_URL/._RESOURCE"
       const user_id = req.user.id
 
-      // To create the notes table
-      const note_id = await knex("notes").insert({
+      // To create the notes table. 
+      const [note_id] = await knex("notes").insert({
          title,
          description,
          user_id
